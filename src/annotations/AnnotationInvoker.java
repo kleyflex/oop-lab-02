@@ -12,13 +12,12 @@ import java.util.Comparator;
 public class AnnotationInvoker {
     // Значение параметров простых типов
     private static final Map<Class<?>, Object> VALUES = Map.of(
-        int.class, 3,
-        long.class, 5L,
-        double.class, 2.5,
-        boolean.class, true,
-        char.class, 'A',
-        String.class, "Java"
-    );
+            int.class, 3,
+            long.class, 5L,
+            double.class, 2.5,
+            boolean.class, true,
+            char.class, 'A',
+            String.class, "Java");
 
     // Вызов protected и private методов с @Repeat столько сколько в аннотации
     public static void invokeAnnotated(Object target) {
@@ -26,10 +25,10 @@ public class AnnotationInvoker {
             throw new IllegalArgumentException("Объект для вызова не задан");
         }
 
-        for(Method method : target.getClass().getDeclaredMethods()) {
+        for (Method method : target.getClass().getDeclaredMethods()) {
             Repeat repeat = method.getAnnotation(Repeat.class);
 
-            if(repeat != null && isProtectedOrPrivate(method)) {
+            if (repeat != null && isProtectedOrPrivate(method)) {
                 invoke(target, method, repeat.value());
             }
         }
@@ -51,7 +50,7 @@ public class AnnotationInvoker {
         System.out.println("Метод: " + method.getName() + ", вызовов: " + times);
 
         try {
-            for(int i = 0; i < times; i++) {
+            for (int i = 0; i < times; i++) {
                 method.invoke(target, args);
             }
         } catch (IllegalAccessException e) {
@@ -68,11 +67,11 @@ public class AnnotationInvoker {
 
     // Создаем значение параметра по типу
     private static Object createValue(Class<?> type) {
-        if(VALUES.containsKey(type)) {
+        if (VALUES.containsKey(type)) {
             return VALUES.get(type);
         }
 
-        if(type.isArray()) {
+        if (type.isArray()) {
             Object array = Array.newInstance(type.getComponentType(), 1);
             Array.set(array, 0, createValue(type.getComponentType()));
             return array;
@@ -87,7 +86,7 @@ public class AnnotationInvoker {
         Constructor<?>[] constructors = type.getDeclaredConstructors();
         Arrays.sort(constructors, Comparator.comparingInt(Constructor::getParameterCount));
 
-        for(Constructor<?> constructor : constructors) {
+        for (Constructor<?> constructor : constructors) {
             try {
                 constructor.setAccessible(true);
                 return constructor.newInstance(createArgs(constructor.getParameterTypes()));
@@ -98,7 +97,4 @@ public class AnnotationInvoker {
 
         throw new IllegalArgumentException("Не удалось создать значение для типа " + type.getName());
     }
-
-
-
 }

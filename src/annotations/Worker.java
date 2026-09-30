@@ -7,7 +7,7 @@ public class Worker {
         System.out.println("Привет, " + name);
     }
 
-    public void printSum (int a, int b) {
+    public void printSum(int a, int b) {
         System.out.println("Сумма: " + (a + b));
     }
 
