@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.nio.channels.IllegalSelectorException;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -58,7 +57,7 @@ public class AnnotationInvoker {
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Нет доступа к методу " + method.getName(), e);
         } catch (InvocationTargetException e) {
-            throw new IllegalStateException("Метод " + method.getName() + " завершился");
+            throw new IllegalStateException("Метод " + method.getName() + " завершился с ошибкой", e.getCause());
         }
     }
 
@@ -93,7 +92,7 @@ public class AnnotationInvoker {
                 constructor.setAccessible(true);
                 return constructor.newInstance(createArgs(constructor.getParameterTypes()));
             } catch (ReflectiveOperationException | RuntimeException e) {
-
+                // пропускаем
             }
         }
 
