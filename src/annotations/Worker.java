@@ -7,6 +7,7 @@ public class Worker {
         System.out.println("Привет, " + name);
     }
 
+    @Repeat(2)
     public void printSum(int a, int b) {
         System.out.println("Сумма: " + (a + b));
     }
